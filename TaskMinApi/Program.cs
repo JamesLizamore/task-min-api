@@ -7,6 +7,15 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 builder.Services.AddDbContext<DataContext>();
+builder.Services.AddCors(options =>
+{
+    options.AddPolicy("AllowReactApp", policy =>
+    {
+        policy.WithOrigins("http://localhost:5173")
+            .AllowAnyHeader()
+            .AllowAnyMethod();
+    });
+});
 
 var app = builder.Build();
 
@@ -17,16 +26,15 @@ if (app.Environment.IsDevelopment())
     app.UseSwaggerUI();
 }
 
-app.UseHttpsRedirection();
+//app.UseHttpsRedirection();
+app.UseCors("AllowReactApp");
 
 
 app.MapGet("/task", async (DataContext context) =>
     await context.Tasks.ToListAsync());
 
 app.MapGet("/task/{id}", async (DataContext context, int id) =>
-    await context.Tasks.FindAsync(id) is Task task ? 
-        Results.Ok(task) : 
-        Results.NotFound("Sorry, book not found")
+    await context.Tasks.FindAsync(id) is Task task ? Results.Ok(task) : Results.NotFound("Sorry, book not found")
 );
 
 app.MapPost("/task", async (DataContext context, Task task) =>
@@ -36,7 +44,7 @@ app.MapPost("/task", async (DataContext context, Task task) =>
     return Results.Ok(await context.Tasks.ToListAsync());
 });
 
-app.MapPut("/task/{id}", async (DataContext context,Task updatedTask, int id) =>
+app.MapPut("/task/{id}", async (DataContext context, Task updatedTask, int id) =>
 {
     var task = await context.Tasks.FindAsync(id);
     if (task is null)
