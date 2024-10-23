@@ -118,13 +118,13 @@ app.MapPut("/user/{id}", async (DataContext context, User updatedUser, int id) =
 });
 app.MapDelete("/user/{id}", async (DataContext context, int id) =>
 {
-    var user = await context.Tasks.FindAsync(id);
+    var user = await context.Users.FindAsync(id);
     if (user is null)
     {
         return Results.NotFound("Sorry, this user doesn't exist");
     }
 
-    context.Tasks.Remove(user);
+    context.Users.Remove(user);
     await context.SaveChangesAsync();
     return Results.Ok(await context.Users.ToListAsync());
 });
@@ -135,27 +135,27 @@ public class Task
 {
     public int Id { get; set; }
     public required string Title { get; set; }
-    public string Description { get; set; }
-    public string Category { get; set; }
-    public required string Status { get; set; }
-    public DateTime StartDate { get; set; }
-    public DateTime DueDate { get; set; }
-    public string AssignedTo { get; set; }
-    public string AssignedBy { get; set; }
-    public string Difficulty { get; set; }
-    public int EstimatedTime { get; set; }
-    public int ActualTime { get; set; }
-    public double PercentComplete { get; set; }
-    public string Feedback { get; set; }
+    public string? Description { get; set; }
+    public string? Category { get; set; }
+    public string? Status { get; set; }
+    public DateTime StartDate { get; set; } = DateTime.MaxValue;
+    public DateTime DueDate { get; set; } = DateTime.MaxValue;
+    public string? AssignedTo { get; set; }
+    public string? AssignedBy { get; set; }
+    public string? Difficulty { get; set; }
+    public int EstimatedTime { get; set; } = -1;
+    public int ActualTime { get; set; } = -1;
+    public double PercentComplete { get; set; } = -1;
+    public string? Feedback { get; set; }
 }
 
 public class User
 {
     public int UserId { get; set; }
-    public string UserName { get; set; }
-    public string Cohort { get; set; }
-    public string Email { get; set; }
-    public string Role { get; set; }
-    public string Team { get; set; }
-    public string FirebaseUID { get; set; }
+    public string? UserName { get; set; }
+    public string? Cohort { get; set; }
+    public string? Email { get; set; }
+    public string? Role { get; set; }
+    public string? Team { get; set; }
+    public string? FirebaseUID { get; set; }
 }
