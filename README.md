@@ -41,10 +41,15 @@ Each task has multiple properties that help provide context and tracking:
 - **PUT** `/user/{id}` – Update an existing user
 - **DELETE** `/user/{id}` – Delete a user
 
-## Future updates
+### Future updates
 
 - Roles based CRUD operations were added in a second iteration of this project. Roles were created for "students" and "lectures"
 
 - The minimal api was refactored into a controller based api
 
 - Data normalization was implemented to handle many-to-many relationships
+
+
+#### Contributing
+
+This version of the TMS was a group project and is no longer maintained. Please feel free to clone the project and adjust the code as required
